@@ -1,0 +1,172 @@
+{% extends 'inspection/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-banner">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-primary bg-opacity-25 text-info border border-info mb-3 px-3 py-1">
+                    SIH26034 &bull; Legal Metrology Verification
+                </span>
+                <h1 class="display-5 fw-bold text-white mb-2">SMARTPACK INSPECT</h1>
+                <div class="hero-tagline mb-3">IoT and AI-Based Package Verification System</div>
+                <p class="hero-desc mb-4">
+                    An AI-assisted package inspection system that extracts product information using OCR and checks it against applicable Legal Metrology requirements.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'inspection:upload' %}" class="btn btn-primary-sp btn-lg px-4 d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-cloud-arrow-up-fill"></i> Upload Product Image
+                    </a>
+                    <a href="{% url 'inspection:history' %}" class="btn btn-light btn-lg px-4 d-inline-flex align-items-center gap-2 fw-semibold">
+                        <i class="bi bi-clock-history"></i> Inspection History
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10 text-start">
+                    <div class="text-uppercase small fw-bold text-info tracking-wider mb-2">Dual Verification Pipeline</div>
+                    <div class="d-flex align-items-center gap-3 text-light mb-2">
+                        <i class="bi bi-camera text-info fs-4"></i>
+                        <div>
+                            <div class="fw-semibold">Mode 1: OCR Label Verification</div>
+                            <small class="text-secondary">Image preprocessing &amp; Legal Metrology rules</small>
+                        </div>
+                    </div>
+                    <hr class="border-secondary my-2">
+                    <div class="d-flex align-items-center gap-3 text-light">
+                        <i class="bi bi-cpu text-warning fs-4"></i>
+                        <div>
+                            <div class="fw-semibold">Mode 2: Physical Inspection</div>
+                            <small class="text-secondary">ESP32 + Load cell weight cross-check (Phase 11)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Inspection Workflow & Status Key -->
+<div class="container py-5">
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="sp-card h-100 p-4 border-top border-4 border-primary">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-3">
+                        <i class="bi bi-file-earmark-image"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">1. Image &amp; Label OCR</h5>
+                        <small class="text-muted">Digital Text Capture</small>
+                    </div>
+                </div>
+                <p class="text-secondary small mb-0">
+                    Upload clear package labels. OpenCV enhances contrast and suppresses noise before Tesseract extracts declared text.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="sp-card h-100 p-4 border-top border-4 border-info">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="bg-info bg-opacity-10 text-info p-3 rounded-3 fs-3">
+                        <i class="bi bi-ui-checks"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">2. Field Extraction</h5>
+                        <small class="text-muted">Structured Parsing</small>
+                    </div>
+                </div>
+                <p class="text-secondary small mb-0">
+                    Extracts standard declarations: Commodity Name, Net Quantity, MRP, Manufacturer/Packer, Date, and Consumer Care details.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="sp-card h-100 p-4 border-top border-4 border-success">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-3">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">3. Rule Evaluation</h5>
+                        <small class="text-muted">Decision-Support Assessment</small>
+                    </div>
+                </div>
+                <p class="text-secondary small mb-0">
+                    Evaluates extracted fields against Legal Metrology (Packaged Commodities) Rules and classifies findings with statutory reasons.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supported Commodity Categories & Status Meaning -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="sp-card h-100">
+                <div class="sp-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-box-seam me-2 text-primary"></i>Initial Supported Commodities (MVP)</span>
+                    <span class="badge bg-secondary">Phase 1 Target</span>
+                </div>
+                <div class="p-4">
+                    <p class="text-secondary small mb-3">
+                        The current prototype focuses on standard packaged food commodities to ensure high extraction reliability:
+                    </p>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-check2-circle text-success me-2"></i>
+                                <strong>Biscuits &amp; Cookies</strong>
+                            </div>
+                            <span class="badge bg-light text-dark border">Net Wt. (g), MRP, MFD</span>
+                        </div>
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-check2-circle text-success me-2"></i>
+                                <strong>Flour / Atta / Grains</strong>
+                            </div>
+                            <span class="badge bg-light text-dark border">Net Wt. (kg), Packer Details</span>
+                        </div>
+                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-check2-circle text-success me-2"></i>
+                                <strong>Snacks &amp; Confectionery</strong>
+                            </div>
+                            <span class="badge bg-light text-dark border">MRP incl. taxes, Best Before</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="sp-card h-100">
+                <div class="sp-card-header">
+                    <i class="bi bi-traffic-light me-2 text-primary"></i>Compliance Status Criteria
+                </div>
+                <div class="p-4">
+                    <div class="d-flex align-items-start gap-3 mb-3 p-2 rounded bg-light">
+                        <span class="badge-compliant flex-shrink-0">COMPLIANT</span>
+                        <div class="small text-secondary">
+                            All mandatory statutory declarations are present, readable, and align with applicable standards.
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 mb-3 p-2 rounded bg-light">
+                        <span class="badge-review flex-shrink-0">NEEDS REVIEW</span>
+                        <div class="small text-secondary">
+                            Low OCR confidence, ambiguous text, or conditional field requires verification by an inspector.
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 p-2 rounded bg-light">
+                        <span class="badge-noncompliant flex-shrink-0">POTENTIAL NON-COMPLIANCE</span>
+                        <div class="small text-secondary">
+                            Mandatory declarations (e.g. Net Quantity or MRP) are absent or format violates packaging rules.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

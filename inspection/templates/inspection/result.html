@@ -1,0 +1,107 @@
+{% extends 'inspection/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="{% url 'inspection:home' %}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'inspection:history' %}" class="text-decoration-none">History</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Inspection Result</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0 text-dark">Inspection Result Dashboard</h2>
+            <div class="text-muted">Inspection ID: <span class="font-monospace text-primary">SP-000001</span></div>
+        </div>
+        <div class="mt-2 mt-md-0 d-flex gap-2">
+            <a href="{% url 'inspection:upload' %}" class="btn btn-outline-sp btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> New Inspection
+            </a>
+            <button class="btn btn-primary-sp btn-sm" disabled>
+                <i class="bi bi-printer me-1"></i> Download Report
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-info py-2 small">
+        <i class="bi bi-info-circle me-1"></i> Result Dashboard template ready. Full integration with OCR (Phase 3), Field Extraction (Phase 4), and Rule Engine (Phase 7) will dynamically feed this page in subsequent phases.
+    </div>
+
+    <div class="row g-4">
+        <!-- Product Image & Meta -->
+        <div class="col-lg-4">
+            <div class="sp-card p-3 mb-4">
+                <div class="sp-card-header mb-3">Product Label</div>
+                <div class="bg-dark rounded p-2 text-center mb-3">
+                    <i class="bi bi-image text-white-50 fs-1 py-5 d-block"></i>
+                </div>
+                <div class="small">
+                    <div><strong>Product:</strong> ABC Biscuits</div>
+                    <div><strong>Category:</strong> Biscuits &amp; Cookies</div>
+                    <div><strong>Inspection Date:</strong> 2026-09-28</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extracted Fields & Rule Checks -->
+        <div class="col-lg-8">
+            <div class="sp-card p-4 mb-4">
+                <h5 class="fw-bold mb-3">Extracted Information &amp; Legal Metrology Evaluation</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Field</th>
+                                <th>Extracted Value</th>
+                                <th>Rule Status</th>
+                                <th>Reason / Legal Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Product Name</td>
+                                <td>ABC Biscuits</td>
+                                <td><span class="badge bg-success">PASS</span></td>
+                                <td class="small text-muted">Clearly declared on principal display panel</td>
+                            </tr>
+                            <tr>
+                                <td>Net Quantity</td>
+                                <td>500 g</td>
+                                <td><span class="badge bg-success">PASS</span></td>
+                                <td class="small text-muted">Standard metric unit conforming to Rule 12</td>
+                            </tr>
+                            <tr>
+                                <td>MRP</td>
+                                <td>₹50</td>
+                                <td><span class="badge bg-success">PASS</span></td>
+                                <td class="small text-muted">Inclusive of all taxes as per Rule 6</td>
+                            </tr>
+                            <tr>
+                                <td>Manufacturer</td>
+                                <td>ABC Foods Ltd.</td>
+                                <td><span class="badge bg-success">PASS</span></td>
+                                <td class="small text-muted">Complete name and postal address identified</td>
+                            </tr>
+                            <tr>
+                                <td>Date Information</td>
+                                <td>MFD 09/2026</td>
+                                <td><span class="badge bg-success">PASS</span></td>
+                                <td class="small text-muted">Month &amp; Year of manufacture stated clearly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-3 rounded bg-success bg-opacity-10 border border-success border-opacity-25 mt-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-uppercase small fw-bold text-success">Overall Preliminary Assessment</div>
+                        <h4 class="fw-bold text-success mb-0">COMPLIANT</h4>
+                    </div>
+                    <span class="badge bg-success fs-6 px-3 py-2">Score: 100%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

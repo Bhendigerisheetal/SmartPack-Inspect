@@ -1,0 +1,147 @@
+{% extends 'inspection/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="{% url 'inspection:home' %}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">System Information</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0 text-dark">System Information &amp; Architecture</h2>
+            <div class="text-muted">Technical overview, academic positioning, and decision-support boundaries</div>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">
+                Version 1.0.0-Prototype
+            </span>
+        </div>
+    </div>
+
+    <!-- Academic Positioning & Disclaimers -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="sp-card p-4 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary"></i>Academic Positioning</h5>
+                <p class="text-secondary small">
+                    This project is developed under <strong>SIH Problem Statement SIH26034</strong> as an <em>IoT and AI-assisted decision-support system for packaged-commodity verification</em>.
+                </p>
+                <div class="p-3 bg-light rounded-3 mb-3 small">
+                    <strong class="text-dark d-block mb-1">Core Innovation:</strong>
+                    Combining OCR-based digital label verification with IoT-based physical measurement in a single unified inspection workflow.
+                </div>
+                <div class="small text-muted">
+                    <p class="mb-2"><strong>The system strictly adheres to the following principles:</strong></p>
+                    <ul class="ps-3 mb-0">
+                        <li>It does <strong>NOT</strong> claim that OCR itself determines legal culpability or invalidity.</li>
+                        <li>It does <strong>NOT</strong> replace authorized Legal Metrology inspectors; it acts as an intelligent decision-support aid.</li>
+                        <li>Weight variances are treated as <em>Potential Discrepancies needing review</em> subject to permissible maximum error tolerances under Second Schedule of LM Rules.</li>
+                        <li>It does <strong>NOT</strong> issue government certifications or final penal orders.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="sp-card p-4 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-stack me-2 text-primary"></i>Technology Stack</h5>
+                <ul class="list-group list-group-flush small">
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Backend Framework</span>
+                        <span class="fw-semibold">Python / Django 6.0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Frontend UI</span>
+                        <span class="fw-semibold">HTML5, CSS3, JS, Bootstrap 5</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Image Processing</span>
+                        <span class="fw-semibold">OpenCV (cv2)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">OCR Engine</span>
+                        <span class="fw-semibold">Tesseract OCR (pytesseract)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Database</span>
+                        <span class="fw-semibold">MongoDB (pymongo)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Hardware (Phase 11)</span>
+                        <span class="fw-semibold">ESP32 + HX711 + Load Cell</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phase Implementation Status -->
+    <div class="sp-card p-4">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-kanban me-2 text-primary"></i>Phased Roadmap Status</h5>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered align-middle small mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Phase</th>
+                        <th>Module / Capability</th>
+                        <th>Target</th>
+                        <th>Current Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-success">
+                        <td class="fw-bold">Phase 1</td>
+                        <td>Django Architecture &amp; Basic Inspection UI</td>
+                        <td>Home, Upload UI, Navigation, Static Assets</td>
+                        <td><span class="badge bg-success">ACTIVE &bull; READY</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 2</td>
+                        <td>Robust Image Upload &amp; Validation Pipeline</td>
+                        <td>MIME validation, sanitization, media storage</td>
+                        <td><span class="badge bg-secondary">Next Up</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 3</td>
+                        <td>OpenCV Preprocessing &amp; Tesseract OCR</td>
+                        <td>Binarization, contrast adjustment, OCR engine</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 4</td>
+                        <td>Structured Field Extraction Service</td>
+                        <td>Regex &amp; NLP extraction of MRP, Net Wt, Date</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 5</td>
+                        <td>MongoDB Database Connection &amp; Schema</td>
+                        <td>Inspections, rules, extracted data collections</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 6 &amp; 7</td>
+                        <td>Legal Metrology Rule Database &amp; Rule Engine</td>
+                        <td>Automated evaluation &amp; statutory reasons</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 8-10</td>
+                        <td>Results Dashboard, History &amp; PDF Report</td>
+                        <td>Full inspection review and printable audit</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Phase 11-17</td>
+                        <td>IoT Hardware Integration (ESP32 + Load Cell)</td>
+                        <td>Physical weight cross-check &amp; final system</td>
+                        <td><span class="badge bg-light text-secondary border">Upcoming</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

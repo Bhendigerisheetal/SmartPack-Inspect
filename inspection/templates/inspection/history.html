@@ -1,0 +1,451 @@
+{% extends 'inspection/base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+
+        <div>
+
+            <nav aria-label="breadcrumb">
+
+                <ol class="breadcrumb mb-1 small">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{% url 'inspection:home' %}"
+                           class="text-decoration-none">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active"
+                        aria-current="page">
+
+                        Inspection History
+
+                    </li>
+
+                </ol>
+
+            </nav>
+
+
+            <h2 class="fw-bold mb-0 text-dark">
+
+                Inspection History
+
+            </h2>
+
+
+            <div class="text-muted">
+
+                Repository of verified packages and compliance audit logs
+
+            </div>
+
+        </div>
+
+
+        <!-- New Inspection Button -->
+
+        <div class="mt-2 mt-md-0">
+
+            <a href="{% url 'inspection:upload' %}"
+               class="btn btn-primary-sp btn-sm">
+
+                <i class="bi bi-plus-lg me-1"></i>
+
+                New Inspection
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER / SEARCH CARD
+    ====================================================== -->
+
+    <div class="sp-card p-3 mb-4">
+
+        <div class="row g-2">
+
+            <!-- Search -->
+
+            <div class="col-md-4">
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+
+                        <i class="bi bi-search"></i>
+
+                    </span>
+
+
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Search by Product or Inspection ID..."
+                           disabled>
+
+                </div>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div class="col-md-3">
+
+                <select class="form-select" disabled>
+
+                    <option>All Statuses</option>
+
+                    <option>Compliant</option>
+
+                    <option>Needs Review</option>
+
+                    <option>Potential Non-Compliance</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Date -->
+
+            <div class="col-md-3">
+
+                <input type="date"
+                       class="form-control"
+                       disabled>
+
+            </div>
+
+
+            <!-- Filter Button -->
+
+            <div class="col-md-2">
+
+                <button class="btn btn-outline-secondary w-100"
+                        disabled>
+
+                    Filter
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HISTORY TABLE
+    ====================================================== -->
+
+    <div class="sp-card overflow-hidden">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <!-- TABLE HEADER -->
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th scope="col"
+                            class="ps-3">
+
+                            Inspection ID
+
+                        </th>
+
+
+                        <th scope="col">
+
+                            Date &amp; Time
+
+                        </th>
+
+
+                        <th scope="col">
+
+                            Product / Commodity
+
+                        </th>
+
+
+                        <th scope="col">
+
+                            Category
+
+                        </th>
+
+
+                        <th scope="col">
+
+                            Declared Net Wt.
+
+                        </th>
+
+
+                        <th scope="col">
+
+                            Compliance Status
+
+                        </th>
+
+
+                        <th scope="col"
+                            class="text-end pe-3">
+
+                            Action
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <!-- TABLE BODY -->
+
+                <tbody>
+
+                    {% for inspection in inspections %}
+
+                    <tr>
+
+                        <!-- =================================================
+                             INSPECTION ID
+                        ================================================== -->
+
+                        <td class="ps-3 font-monospace fw-bold text-primary">
+
+                            {{ inspection.inspection_id }}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             DATE & TIME
+                        ================================================== -->
+
+                        <td class="small text-muted">
+
+                            {{ inspection.created_at|date:"Y-m-d H:i" }}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             PRODUCT
+                        ================================================== -->
+
+                        <td class="fw-semibold">
+
+                            {{ inspection.product_name|default:"Unknown Product" }}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             CATEGORY
+                        ================================================== -->
+
+                        <td>
+
+                            {{ inspection.commodity_type|default:"Food" }}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             NET QUANTITY
+                        ================================================== -->
+
+                        <td>
+
+                            {{ inspection.net_quantity|default:"—" }}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             COMPLIANCE STATUS
+                        ================================================== -->
+
+                        <td>
+
+                            {% if inspection.compliance_status == "COMPLIANT" %}
+
+                                <span class="badge-compliant">
+
+                                    COMPLIANT
+
+                                </span>
+
+
+                            {% elif inspection.compliance_status == "NEEDS_REVIEW" %}
+
+                                <span class="badge-review">
+
+                                    NEEDS REVIEW
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge bg-danger-subtle text-danger border">
+
+                                    POTENTIAL NON-COMPLIANCE
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+
+                        <!-- =================================================
+                             ACTION BUTTONS
+                        ================================================== -->
+
+                        <td class="text-end pe-3">
+
+                            <div class="d-flex justify-content-end gap-2">
+
+
+                                <!-- VIEW RECORD -->
+
+                                <a href="{% url 'inspection:inspection_detail' inspection.inspection_id %}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="View inspection record">
+
+                                    <i class="bi bi-eye me-1"></i>
+
+                                    View
+
+                                </a>
+
+
+
+                                <!-- DELETE RECORD -->
+
+                                <form method="POST"
+                                      action="{% url 'inspection:delete_inspection' inspection.inspection_id %}"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this inspection record?');">
+
+                                    {% csrf_token %}
+
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            title="Delete inspection record">
+
+                                        <i class="bi bi-trash me-1"></i>
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    {% empty %}
+
+                    <!-- =================================================
+                         NO RECORDS
+                    ================================================== -->
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center py-5">
+
+                            <div class="text-muted">
+
+                                <i class="bi bi-database fs-3 d-block mb-2"></i>
+
+
+                                <strong>
+                                    No inspections found
+                                </strong>
+
+
+                                <div class="small mt-1">
+
+                                    Upload a product image to create
+                                    your first inspection record.
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             DATABASE INFORMATION
+        ====================================================== -->
+
+        <div class="p-3 bg-light text-center small text-muted border-top">
+
+            <i class="bi bi-database me-1"></i>
+
+            Inspection records are currently stored in
+
+            <strong>SQLite</strong>.
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

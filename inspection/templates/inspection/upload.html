@@ -1,0 +1,363 @@
+{% extends 'inspection/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="{% url 'inspection:home' %}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Package Verification</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0 text-dark">SMARTPACK INSPECT</h2>
+            <div class="text-muted">AI &amp; OCR Package Inspection &bull; Legal Metrology Verification</div>
+        </div>
+        <div class="mt-2 mt-md-0 d-flex gap-2">
+            {% if upload_result %}
+            <a href="{% url 'inspection:upload' %}" class="btn btn-outline-sp btn-sm">
+                <i class="bi bi-arrow-clockwise me-1"></i> New Inspection
+            </a>
+            {% endif %}
+            <a href="{% url 'inspection:rules' %}" class="btn btn-light border btn-sm">
+                <i class="bi bi-journal-text me-1"></i> View Rules
+            </a>
+        </div>
+    </div>
+
+    {% if upload_result %}
+    <!-- ==========================================
+         COMPLIANCE RESULT & OCR INSPECTION REPORT
+         ========================================== -->
+    
+    <!-- Top Overall Status Banner -->
+    <div class="mb-4">
+        {% if upload_result.rule_assessment.overall_status == 'COMPLIANT' %}
+        <div class="p-4 rounded-3 bg-success bg-opacity-10 border border-success d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                <div>
+                    <span class="badge bg-success text-white mb-1">OVERALL ASSESSMENT</span>
+                    <h3 class="fw-bold text-success mb-1">COMPLIANT</h3>
+                    <div class="text-secondary small">All mandatory Legal Metrology packaging declarations were identified and conform to statutory standards.</div>
+                </div>
+            </div>
+            <div class="text-md-end">
+                <div class="fs-4 fw-bold text-success">{{ upload_result.rule_assessment.compliance_score }}%</div>
+                <div class="small text-muted">{{ upload_result.rule_assessment.pass_count }}/{{ upload_result.rule_assessment.total_count }} Declarations Passed</div>
+            </div>
+        </div>
+        {% elif upload_result.rule_assessment.overall_status == 'NEEDS_REVIEW' %}
+        <div class="p-4 rounded-3 bg-warning bg-opacity-15 border border-warning d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-1"></i>
+                <div>
+                    <span class="badge bg-warning text-dark mb-1">OVERALL ASSESSMENT</span>
+                    <h3 class="fw-bold text-warning mb-1">NEEDS REVIEW</h3>
+                    <div class="text-secondary small">Certain packaging fields require visual confirmation by an inspector due to low OCR confidence or ambiguous formatting.</div>
+                </div>
+            </div>
+            <div class="text-md-end">
+                <div class="fs-4 fw-bold text-warning">{{ upload_result.rule_assessment.compliance_score }}%</div>
+                <div class="small text-muted">{{ upload_result.rule_assessment.pass_count }}/{{ upload_result.rule_assessment.total_count }} Declarations Clear</div>
+            </div>
+        </div>
+        {% else %}
+        <div class="p-4 rounded-3 bg-danger bg-opacity-10 border border-danger d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-x-circle-fill text-danger fs-1"></i>
+                <div>
+                    <span class="badge bg-danger text-white mb-1">OVERALL ASSESSMENT</span>
+                    <h3 class="fw-bold text-danger mb-1">POTENTIAL NON-COMPLIANCE</h3>
+                    <div class="text-secondary small">One or more mandatory statutory declarations (such as MRP or Net Quantity) appear missing or non-compliant.</div>
+                </div>
+            </div>
+            <div class="text-md-end">
+                <div class="fs-4 fw-bold text-danger">{{ upload_result.rule_assessment.compliance_score }}%</div>
+                <div class="small text-muted">{{ upload_result.rule_assessment.pass_count }}/{{ upload_result.rule_assessment.total_count }} Declarations Detected</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Active OCR Engine Notice -->
+    <div class="alert alert-primary d-flex align-items-center justify-content-between py-2 mb-4" role="alert">
+        <div class="d-flex align-items-center gap-2 small">
+            <i class="bi bi-cpu-fill fs-5 text-primary"></i>
+            <div>
+                <strong>Active Vision &amp; OCR Engine:</strong> {{ upload_result.engine_used }} &bull; Real-time OpenCV preprocessing &amp; deep-learning text extraction.
+            </div>
+        </div>
+        <span class="badge bg-primary text-white font-monospace">LIVE OCR ACTIVE</span>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Column 1: Image Views (Original vs OpenCV Preprocessed) -->
+        <div class="col-lg-5">
+            <div class="sp-card p-3 mb-4">
+                <div class="sp-card-header d-flex justify-content-between align-items-center mb-3">
+                    <span><i class="bi bi-image me-2 text-primary"></i>Product Label Imagery</span>
+                    <span class="badge bg-light text-secondary border">{{ upload_result.commodity_type }}</span>
+                </div>
+
+                <ul class="nav nav-pills nav-fill mb-3" id="imageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active py-1 small fw-semibold" id="original-tab" data-bs-toggle="tab" data-bs-target="#originalView" type="button" role="tab">Original Label</button>
+                    </li>
+                    {% if upload_result.preprocessed_url %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-1 small fw-semibold" id="prep-tab" data-bs-toggle="tab" data-bs-target="#prepView" type="button" role="tab">OpenCV Binarized</button>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <div class="tab-content" id="imageTabsContent">
+                    <div class="tab-pane fade show active text-center bg-dark rounded p-2" id="originalView" role="tabpanel">
+                        <img src="{{ upload_result.media_url }}" alt="Original Product Label" class="img-fluid rounded" style="max-height: 340px; object-fit: contain;">
+                    </div>
+                    {% if upload_result.preprocessed_url %}
+                    <div class="tab-pane fade text-center bg-dark rounded p-2" id="prepView" role="tabpanel">
+                        <img src="{{ upload_result.preprocessed_url }}" alt="OpenCV Preprocessed Image" class="img-fluid rounded" style="max-height: 340px; object-fit: contain;">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="bg-light p-3 rounded-2 small mt-3">
+                    <div class="row g-2">
+                        <div class="col-5 text-muted">Original File:</div>
+                        <div class="col-7 text-truncate fw-semibold">{{ upload_result.file_name }}</div>
+                        <div class="col-5 text-muted">File Size:</div>
+                        <div class="col-7">{{ upload_result.file_size_kb }} KB</div>
+                        <div class="col-5 text-muted">OCR Confidence:</div>
+                        <div class="col-7"><span class="badge bg-primary text-white">{{ upload_result.ocr_confidence }}%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OCR Extracted Raw Text Display -->
+            <div class="sp-card p-3">
+                <div class="sp-card-header d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-terminal me-2 text-primary"></i>OCR Extracted Raw Text</span>
+                    <span class="badge bg-secondary font-monospace">{{ upload_result.engine_used }}</span>
+                </div>
+                <p class="text-muted small mb-2">Raw character stream captured from package display panel:</p>
+                <div class="bg-dark text-light p-3 rounded font-monospace small" style="white-space: pre-wrap; max-height: 220px; overflow-y: auto;">{{ upload_result.raw_text }}</div>
+            </div>
+        </div>
+
+        <!-- Column 2: Structured Fields & Legal Metrology Compliance Checklist -->
+        <div class="col-lg-7">
+            <!-- Structured Extracted Fields -->
+            <div class="sp-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center pb-2 mb-3 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-card-checklist me-2 text-primary"></i>Structured Field Extraction</h5>
+                    <span class="badge bg-primary-subtle text-primary border border-primary">Phase 4 Active</span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-light border h-100">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Product Name</div>
+                            <div class="fw-bold fs-6 text-dark">
+                                {% if upload_result.extracted_fields.product_name %}
+                                <i class="bi bi-check-circle-fill text-success me-1"></i> {{ upload_result.extracted_fields.product_name }}
+                                {% else %}
+                                <span class="text-warning"><i class="bi bi-question-circle me-1"></i> Not Detected</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-light border h-100">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Declared Net Quantity</div>
+                            <div class="fw-bold fs-6 text-dark">
+                                {% if upload_result.extracted_fields.net_quantity %}
+                                <i class="bi bi-check-circle-fill text-success me-1"></i> {{ upload_result.extracted_fields.net_quantity }}
+                                {% else %}
+                                <span class="text-danger"><i class="bi bi-x-circle me-1"></i> Missing / Unreadable</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-light border h-100">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Retail Price (MRP)</div>
+                            <div class="fw-bold fs-6 text-dark">
+                                {% if upload_result.extracted_fields.mrp %}
+                                <i class="bi bi-check-circle-fill text-success me-1"></i> {{ upload_result.extracted_fields.mrp }} <span class="badge bg-secondary font-monospace ms-1 small">Incl. Taxes</span>
+                                {% else %}
+                                <span class="text-danger"><i class="bi bi-x-circle me-1"></i> Not Detected</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-light border h-100">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Date Information (MFD / EXP)</div>
+                            <div class="fw-bold fs-6 text-dark">
+                                {% if upload_result.extracted_fields.date_info %}
+                                <i class="bi bi-check-circle-fill text-success me-1"></i> {{ upload_result.extracted_fields.date_info }}
+                                {% else %}
+                                <span class="text-warning"><i class="bi bi-question-circle me-1"></i> Needs Review</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 rounded bg-light border">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Manufacturer / Packer Details</div>
+                            <div class="fw-semibold text-dark">
+                                {% if upload_result.extracted_fields.manufacturer %}
+                                <i class="bi bi-building-check text-success me-1"></i> {{ upload_result.extracted_fields.manufacturer }}
+                                {% else %}
+                                <span class="text-muted">Not detected on visible label panel</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statutory Rule Engine Evaluation Table -->
+            <div class="sp-card p-4">
+                <div class="d-flex justify-content-between align-items-center pb-2 mb-3 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check me-2 text-primary"></i>Legal Metrology Rule Verification</h5>
+                    <span class="badge bg-dark">Packaged Commodities Rules, 2011</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle border mb-0 small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Statutory Declaration</th>
+                                <th>Detected Value</th>
+                                <th>Status</th>
+                                <th>Legal Reference &amp; Rationale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for check in upload_result.rule_assessment.checks %}
+                            <tr>
+                                <td>
+                                    <strong class="d-block text-dark">{{ check.field }}</strong>
+                                    <span class="font-monospace text-muted" style="font-size: 0.75rem;">{{ check.rule_id }}</span>
+                                </td>
+                                <td>
+                                    <span class="font-monospace text-primary">{{ check.extracted_value }}</span>
+                                </td>
+                                <td>
+                                    {% if check.status == 'PASS' %}
+                                    <span class="badge bg-success-subtle text-success border border-success fw-bold">PASS</span>
+                                    {% elif check.status == 'NEEDS_REVIEW' %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning fw-bold">NEEDS REVIEW</span>
+                                    {% else %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger fw-bold">NON-COMPLIANCE</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="text-secondary">{{ check.reason }}</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">{{ check.statutory_reference }}</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+                    <a href="{% url 'inspection:upload' %}" class="btn btn-outline-sp">
+                        <i class="bi bi-cloud-arrow-up me-1"></i> Upload Another Image
+                    </a>
+                    <a href="{% url 'inspection:home' %}" class="btn btn-primary-sp">
+                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- UPLOAD FORM (Shown when no result or at bottom) -->
+    {% if not upload_result %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="sp-card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold mb-1">Package Verification</h3>
+                    <p class="text-muted small">
+                        Upload a front or back panel image of a packaged commodity (e.g. Biscuits, Atta, Snacks) to run OCR and Legal Metrology rule verification.
+                    </p>
+                </div>
+
+                {% if form.errors %}
+                <div class="alert alert-danger mb-4" role="alert">
+                    <div class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Validation Notice:</div>
+                    <ul class="mb-0 ps-3">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label for="{{ form.commodity_type.id_for_label }}" class="form-label fw-semibold text-secondary small text-uppercase">
+                            Commodity Category
+                        </label>
+                        {{ form.commodity_type }}
+                        <div class="form-text small">Select category to load specialized Legal Metrology rule parameters.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-secondary small text-uppercase">
+                            Product Image
+                        </label>
+
+                        <!-- Drag and Drop Zone -->
+                        <div class="upload-dropzone position-relative" id="uploadDropzone">
+                            {{ form.image }}
+                            
+                            <div id="uploadPrompt">
+                                <i class="bi bi-cloud-arrow-up upload-icon d-block"></i>
+                                <h5 class="fw-bold mb-1">[ Choose Product Image ]</h5>
+                                <p class="text-muted small mb-2">Drag and drop package photo here, or browse files</p>
+                                <span class="badge bg-light text-secondary border">Supports JPG, JPEG, PNG (Max 10MB)</span>
+                            </div>
+
+                            <div id="selectedFileInfo" class="d-none">
+                                <i class="bi bi-file-earmark-check text-success upload-icon d-block"></i>
+                                <h5 class="fw-bold mb-1" id="selectedFileName">file_name.png</h5>
+                                <p class="text-muted small mb-2" id="selectedFileSize">(0 KB)</p>
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="resetImageBtn">
+                                    <i class="bi bi-x-circle me-1"></i> Choose Different Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client-Side Instant Preview Container -->
+                    <div class="preview-container text-center p-2 mb-4" id="previewContainer">
+                        <div class="text-secondary small mb-2 text-start px-2">Image Preview:</div>
+                        <img id="previewImage" src="" alt="Selected package preview" class="preview-image rounded">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary-sp btn-lg py-3 fw-bold" id="submitBtn" disabled>
+                            <i class="bi bi-shield-check me-2"></i> VERIFY PRODUCT
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

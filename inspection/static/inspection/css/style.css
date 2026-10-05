@@ -1,0 +1,293 @@
+/* SmartPack Inspect - Professional Inspection & Decision-Support System Styling */
+:root {
+  --primary-navy: #0f2b48;
+  --secondary-navy: #1b3d63;
+  --accent-blue: #0284c7;
+  --accent-light: #e0f2fe;
+  --bg-light: #f8fafc;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --status-compliant: #16a34a;
+  --status-compliant-bg: #dcfce7;
+  --status-review: #d97706;
+  --status-review-bg: #fef3c7;
+  --status-noncompliant: #dc2626;
+  --status-noncompliant-bg: #fee2e2;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.smartpack-navbar {
+  background: var(--primary-navy);
+  border-bottom: 2px solid #24466b;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  padding: 0.75rem 1.5rem;
+}
+
+.brand-badge {
+  background: rgba(2, 132, 199, 0.2);
+  border: 1px solid var(--accent-blue);
+  color: #bae6fd;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.smartpack-nav-link {
+  color: #cbd5e1 !important;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 0.5rem 0.85rem !important;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.smartpack-nav-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.smartpack-nav-link.active {
+  color: #ffffff !important;
+  background-color: #244b75;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero-banner {
+  background: linear-gradient(135deg, #0f2b48 0%, #1e4069 100%);
+  color: #ffffff;
+  padding: 3.5rem 1.5rem;
+  border-bottom: 1px solid #cbd5e1;
+  position: relative;
+}
+
+.hero-banner h1 {
+  font-size: 2.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hero-tagline {
+  color: #93c5fd;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.hero-desc {
+  color: #e2e8f0;
+  max-width: 720px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Regulatory Disclaimer Notice */
+.disclaimer-banner {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  padding: 0.85rem 1.25rem;
+  border-radius: 6px;
+  color: #78350f;
+  font-size: 0.88rem;
+}
+
+/* Cards & Content */
+.sp-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sp-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.sp-card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: #fcfcfd;
+  font-weight: 600;
+  color: var(--primary-navy);
+}
+
+/* Buttons */
+.btn-primary-sp {
+  background-color: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-sp:hover {
+  background-color: #0369a1;
+  border-color: #0369a1;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-outline-sp {
+  background-color: transparent;
+  border: 1.5px solid #cbd5e1;
+  color: var(--primary-navy);
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-sp:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: var(--primary-navy);
+}
+
+/* Upload Dropzone */
+.upload-dropzone {
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  position: relative;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+  border-color: var(--accent-blue);
+  background-color: #f0f9ff;
+}
+
+.file-input-hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: var(--accent-blue);
+  margin-bottom: 1rem;
+}
+
+/* Preview Box */
+.preview-container {
+  display: none;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #000;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Status Badges */
+.badge-compliant {
+  background-color: var(--status-compliant-bg);
+  color: var(--status-compliant);
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+
+.badge-review {
+  background-color: var(--status-review-bg);
+  color: var(--status-review);
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.badge-noncompliant {
+  background-color: var(--status-noncompliant-bg);
+  color: var(--status-noncompliant);
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+/* Timeline / Status Pipeline */
+.pipeline-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.step-indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.step-active {
+  background-color: #0284c7;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+}
+
+.step-completed {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.step-pending {
+  background-color: #e2e8f0;
+  color: #64748b;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  background-color: #0f172a;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #1e293b;
+}

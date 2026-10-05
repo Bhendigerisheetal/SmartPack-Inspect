@@ -1,0 +1,10 @@
+# SmartPack Inspect - Dependencies
+Django>=5.0,<6.1
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+opencv-python>=4.8.0
+pytesseract>=0.3.10
+rapidocr-onnxruntime>=1.2.0
+
+# Future Phase Dependencies:
+# pymongo>=4.6.0

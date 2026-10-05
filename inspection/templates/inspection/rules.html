@@ -1,0 +1,98 @@
+{% extends 'inspection/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="{% url 'inspection:home' %}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Rules</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0 text-dark">Legal Metrology Rules Repository</h2>
+            <div class="text-muted">Statutory verification rules under Legal Metrology (Packaged Commodities) Rules, 2011</div>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <span class="badge bg-light text-secondary border px-3 py-2">
+                <i class="bi bi-bank me-1"></i> Dept. of Consumer Affairs, GoI
+            </span>
+        </div>
+    </div>
+
+    <div class="sp-card p-4 mb-4">
+        <h5 class="fw-bold text-dark mb-2">Rule Architecture &amp; Statutory Sourcing</h5>
+        <p class="text-secondary small mb-3">
+            To ensure legal accuracy and prevent speculative checks, all inspection rules are mapped to specific sections of the <strong>Legal Metrology Act, 2009</strong> and the <strong>Legal Metrology (Packaged Commodities) Rules, 2011</strong> (as amended).
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border">
+                <thead class="table-light">
+                    <tr>
+                        <th>Rule ID</th>
+                        <th>Target Declaration</th>
+                        <th>Statutory Requirement</th>
+                        <th>Applicability</th>
+                        <th>Official Source Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R01</td>
+                        <td><strong>Name &amp; Address of Manufacturer / Packer</strong></td>
+                        <td>Name and complete postal address of the manufacturer, or packer, or manufacturer and packer.</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(a), LM (Packaged Commodities) Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R02</td>
+                        <td><strong>Common or Generic Commodity Name</strong></td>
+                        <td>Generic name of the commodity contained in the package.</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(b), LM (Packaged Commodities) Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R03</td>
+                        <td><strong>Net Quantity</strong></td>
+                        <td>Net quantity in terms of standard unit of weight or measure (g, kg, ml, l) with prescribed font heights.</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(c) &amp; Rule 12, LM Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R04</td>
+                        <td><strong>Month &amp; Year of Manufacture / Packing</strong></td>
+                        <td>Month and year in which commodity is manufactured, packed or imported.</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(d), LM Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R05</td>
+                        <td><strong>Maximum Retail Price (MRP)</strong></td>
+                        <td>Retail sale price of the package inclusive of all taxes in format "MRP Rs. ... incl. of all taxes".</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(e), LM Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R06</td>
+                        <td><strong>Consumer Care Details</strong></td>
+                        <td>Name, address, telephone number and email address of person or office to be contacted for consumer complaints.</td>
+                        <td><span class="badge bg-primary">Required</span></td>
+                        <td class="small text-muted">Rule 6(1)(n), LM Rules, 2011</td>
+                    </tr>
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">LM-R07</td>
+                        <td><strong>Country of Origin</strong></td>
+                        <td>Mandatory declaration of country of origin if commodity is imported.</td>
+                        <td><span class="badge bg-warning text-dark">Conditional</span></td>
+                        <td class="small text-muted">Rule 6(1)(ab), 2017 Amendment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="small text-muted mt-2">
+            * Complete database schema with dynamic rule configuration will be integrated in Phase 6 &amp; Phase 7.
+        </div>
+    </div>
+</div>
+{% endblock %}

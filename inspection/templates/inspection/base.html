@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title|default:"SmartPack Inspect – Package Verification System" }}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'inspection/css/style.css' %}">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg smartpack-navbar sticky-top">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none fw-bold me-4" href="{% url 'inspection:home' %}">
+                <i class="bi bi-box-seam-fill text-info fs-4"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span class="fs-5 tracking-wide">SMARTPACK <span class="text-info">INSPECT</span></span>
+                    <span class="brand-badge mt-1">SIH26034 Prototype</span>
+                </div>
+            </a>
+            <button class="navbar-toggler border-secondary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'dashboard' %}active{% endif %}" href="{% url 'inspection:home' %}">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'upload' %}active{% endif %}" href="{% url 'inspection:upload' %}">
+                            <i class="bi bi-cloud-arrow-up me-1"></i> New Inspection
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'history' %}active{% endif %}" href="{% url 'inspection:history' %}">
+                            <i class="bi bi-clock-history me-1"></i> Inspection History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'rules' %}active{% endif %}" href="{% url 'inspection:rules' %}">
+                            <i class="bi bi-journal-bookmark me-1"></i> Rules
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'reports' %}active{% endif %}" href="{% url 'inspection:reports' %}">
+                            <i class="bi bi-file-earmark-text me-1"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link smartpack-nav-link {% if active_tab == 'system_info' %}active{% endif %}" href="{% url 'inspection:system_info' %}">
+                            <i class="bi bi-info-circle me-1"></i> System Information
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-dark border border-secondary text-light px-3 py-2 font-monospace">
+                        <i class="bi bi-cpu text-info me-1"></i> Mode 1: Image OCR
+                    </span>
+                    <a href="{% url 'inspection:upload' %}" class="btn btn-primary-sp btn-sm px-3 d-flex align-items-center gap-1">
+                        <i class="bi bi-plus-circle"></i> Inspect Product
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Academic Disclaimer Banner -->
+    <div class="container my-4">
+        <div class="disclaimer-banner d-flex align-items-center gap-3">
+            <i class="bi bi-shield-exclamation text-warning fs-4 flex-shrink-0"></i>
+            <div>
+                <strong>Academic Prototype & Decision-Support Notice:</strong>
+                This system assists inspectors by flagging potential declaration discrepancies under Legal Metrology guidelines. It does not issue definitive statutory judgments of product illegality; results are classified as <em>COMPLIANT</em>, <em>NEEDS REVIEW</em>, or <em>POTENTIAL NON-COMPLIANCE</em>.
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <span class="fw-bold text-light">SmartPack Inspect</span> &bull; IoT and AI-Based Package Verification System
+                    <div class="text-secondary small mt-1">SIH Problem Statement: SIH26034 | Academic Decision-Support System</div>
+                </div>
+                <div class="col-md-6 text-md-end text-secondary small">
+                    Phase 1: Foundation & Upload UI &bull; Django Backend
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'inspection/js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
